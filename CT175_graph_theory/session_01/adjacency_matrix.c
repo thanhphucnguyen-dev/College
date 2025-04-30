@@ -86,7 +86,7 @@ int outdegree(Graph *pG, int u){
 }
 
 // neighbours_undirected
-void neighbours(Graph *pG, int u){
+void neighbors_1(Graph *pG, int u){
 	int i;
 	for(i = 1; i <= pG->n; i++)
 		if(pG->A[u][i] || pG->A[i][u])
@@ -94,7 +94,7 @@ void neighbours(Graph *pG, int u){
 }
 
 // neighbours_directed
-void neighbours(Graph *pG, int u){
+void neighbors_2(Graph *pG, int u){
 	int i;
 	for(i = 1; i <= pG->n; i++)
 		if(pG->A[u][i])
@@ -111,11 +111,16 @@ int deg(Graph *pG, int x){
 
 int main() {
     Graph G;
-    read_graph(&G);
+		init_graph(&G, 5);
+		add_edge_1(&G, 1, 2);
+		add_edge_1(&G, 1, 3);
+		add_edge_1(&G, 2, 4);
+		add_edge_1(&G, 3, 4);
+		add_edge_1(&G, 3, 5);
     int i;
     for(i = 1; i <= G.n; i++){
-        printf("neighbours(%d) = ", i);
-        neighbours(&G, i);
+        printf("neighbors(%d) = ", i);
+        neighbors_1(&G, i);
         printf("\n");
     }
     return 0;
