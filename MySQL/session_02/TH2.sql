@@ -1,0 +1,170 @@
+﻿/*
+1. KHOAHOC (MAKH,TENKH,NGAYBD, NGAYKT)
+2. CHUONGTRINH (MACT,TENCT)
+3. LOAILOP (MALOAI, MACT, TENLOAI)
+4. LOP (MALOP, MALOAI, TENLOP, SISO, MAKH)
+5. HOCVIEN (MAHV,TENHV,GIOITINH,NGAYSINH,SDT,DIACHI)
+6. PHIEUTHU(SOPT,MAHV, MALOP,NGAYLAPPHIEU,THANHTIEN)
+7. MONHOC (MAMH, TENMH) 
+8. DIEM ( MAMH,MAHV ,MALOP,DIEM)
+Định dạng ngày: yyyy-mm-dd để nhập dữ liệu
+
+*/
+
+-- 1. Xem nội dung của tất cả các bảng dữ liệu bằng lệnh SELECT
+SELECT * FROM KHOAHOC;
+SELECT * FROM CHUONGTRINH;
+SELECT * FROM LOAILOP;
+SELECT * FROM LOP;
+SELECT * FROM HOCVIEN;
+SELECT * FROM PHIEUTHU;
+SELECT * FROM MONHOC;
+SELECT * FROM DIEM;
+
+-- 2. Tìm thông tin về các học viên nam
+SELECT	*
+FROM	HOCVIEN
+WHERE	GIOITINH = 1;
+
+--3. Tìm thông tin về các học viên có địa chỉ ở Cần Thơ
+SELECT *
+FROM HOCVIEN
+WHERE DIACHI LIKE '%C?n Tho';
+
+--4. Tìm thông tin về các lớp học của ‘khoá 1’
+SELECT	*
+FROM	LOP L JOIN KHOAHOC K ON K.MAKH = L.MAKH
+WHERE	TENKH LIKE 'Khóa 1';
+
+--5. Tìm mã và họ tên học viên có học ‘khoá 1’
+
+SELECT	H.MAHV, H.TENHV
+FROM	KHOAHOC K JOIN LOP L		ON L.MAKH	= K.MAKH
+				  JOIN PHIEUTHU P	ON P.MALOP	= L.MALOP
+				  JOIN HOCVIEN H	ON H.MAHV	= P.MAHV
+WHERE	LOWER(K.TENKH) LIKE 'Khóa 1';
+
+--6. Tìm họ tên các học viên có bao gồm chữ ‘Đỗ’
+SELECT	TENHV
+FROM	HOCVIEN
+WHERE	TENHV LIKE  '%Ð?%';
+
+-- 7. Tìm thông tin các học viên sinh năm 2000 ?
+
+SELECT	MAHV, TENHV, NGAYSINH
+FROM	HOCVIEN
+WHERE	YEAR(NGAYSINH) = 2000;
+
+/*
+Trong SQL Oracle: 
+				Dùng EXTRACT(YEAR FROM NGAYSINH) = 2000;
+				SELECT	MAHV, TENHV, NGAYSINH
+				FROM	HOCVIEN
+				WHERE	EXTRACT(YEAR FROM NGAYSINH) = 2000;
+*/
+
+-- 8. Tìm thông tin của các học viên sinh tháng 12 năm 2001 ?
+SELECT MAHV, TENHV, NGAYSINH
+FROM HOCVIEN
+WHERE MONTH(NGAYSINH) = 12 AND YEAR(NGAYSINH) = 2001;
+/* 
+Trong SQL Oracle: 
+				SELECT MAHV, TENHV, NGAYSINH
+				FROM HOCVIEN
+				WHERE EXTRACT(MONTH FROM NGAYSINH) = 12 AND
+					  EXTRACT(YEAR FROM NGAYSINH) = 2001;
+*/
+
+-- 9. Tìm thông tin các học viên sinh từ năm 1998 đến 2000 
+SELECT MAHV, TENHV, NGAYSINH
+FROM HOCVIEN
+WHERE YEAR(NGAYSINH) >= 1998 AND YEAR(NGAYSINH) <= 2000;
+
+/*
+Trong SQL Oracle: 
+				SELECT MAHV, TENHV, NGAYSINH
+				FROM HOCVIEN
+				WHERE EXTRACT(YEAR FROM NGAYSINH) BETWEEN 1998 AND 2000;
+*/
+
+--10. Tìm thông tin các phiếu thu được thực hiện từ ngày 5 đến ngày 10 tháng 6 năm 2021 ?
+--...
+/*
+Trong SQL Oracle: 
+	SELECT *
+	FROM PHIEUTHU
+	WHERE	EXTRACT(DAY FROM NGAYSINH) BETWEEN 5 AND 10
+			EXTRACT(MONTH FROM NGAYSINH) = 6
+			EXTRACT (YEAR FROM NGAYSINH) = 2021;
+*/
+--11. In danh sách các học viên lớp ‘Lớp 1’ Tiếng anh căn bản
+
+SELECT H.*
+FROM LOAILOP LL JOIN LOP L ON L.MALOAI = LL.MALOAI
+				JOIN PHIEUTHU P ON P.MALOP = L.MALOP
+				JOIN HOCVIEN H ON H.MAHV = P.MAHV
+WHERE L.TENLOP LIKE 'L?p 1' AND LL.TENLOAI LIKE 'Ti?ng Anh can b?n';
+
+--12. In danh sách các lớp thuộc chương trình ‘Tiếng anh tổng quát’
+SELECT * FROM CHUONGTRINH;
+SELECT L.*
+FROM LOP L	JOIN LOAILOP LL ON LL.MALOAI = L.MALOAI
+			JOIN CHUONGTRINH CT ON CT.MACT = LL.MACT
+WHERE	CT.TENCT LIKE 'Ti?ng Anh T?ng Quát';	
+
+--13. Liệt kê thông tin tất cả các phiếu thu của ‘lớp 1’ Tiếng anh A1?
+SELECT PT.*
+FROM LOAILOP LL JOIN LOP L ON L.MALOAI = LL.MALOAI
+				JOIN PHIEUTHU PT ON PT.MALOP = L.MALOP
+WHERE LL.TENLOAI LIKE 'Ti?ng Anh A1' AND L.TENLOP LIKE 'L?p 1';
+
+--14. Tìm họ tên học viên, tên môn và điểm thi các môn của các học viên học ‘khoá 1’
+SELECT * FROM KHOAHOC;
+
+SELECT H.TENHV, M.TENMH, D.DIEM 
+FROM	KHOAHOC K JOIN LOP L ON L.MAKH = K.MAKH
+				  JOIN DIEM D ON D.MALOP = L.MALOP
+				  JOIN HOCVIEN H ON H.MAHV = D.MAHV
+				  JOIN MONHOC M ON M.MAMH = D.MAMH
+WHERE	K.TENKH LIKE 'Khóa 1';
+
+--15. Có tất cả bao nhiêu học viên ?
+
+SELECT	COUNT(MAHV) SOHV
+FROM	HOCVIEN;
+
+--16. ‘Lớp 1’ Tiếng anh căn bản có bao nhiêu học viên ?
+
+SELECT COUNT(H.MAHV) SOHV
+FROM LOAILOP LL JOIN LOP L ON L.MALOAI = LL.MALOAI
+				JOIN DIEM D ON D.MALOP = L.MALOP
+				JOIN HOCVIEN H ON H.MAHV = D.MAHV
+WHERE LL.TENLOAI LIKE 'Ti?ng Anh can b?n' AND L.TENLOP LIKE 'L?p 1';
+
+--17. Tính tổng số tiền đã thu được của ‘lớp 1’ Tiếng anh căn bản
+
+SELECT SUM(P.THANHTIEN) TONGTIEN
+FROM LOAILOP LL JOIN LOP L ON L.MALOAI = LL.MALOAI
+				JOIN PHIEUTHU P ON L.MALOP = P.MALOP
+WHERE L.TENLOP LIKE 'L?p 1' AND LL.TENLOAI LIKE 'Ti?ng Anh can b?n';
+
+--18. Tính tổng số tiền đã thu được của ‘khoá 1’ ?
+
+SELECT	SUM(P.THANHTIEN) TONG
+FROM	KHOAHOC K JOIN LOP L ON L.MAKH = K.MAKH
+				  JOIN PHIEUTHU P ON P.MALOP = L.MALOP
+WHERE	K.TENKH LIKE 'Khóa 1';
+--19. Tính điểm trung bình của học viên 'Đỗ Gia Bảo', sinh ngày 02/12/2001 học ‘lớp 1’ Tiếng anh căn bản ?
+
+SELECT	AVG(D.DIEM) DTB
+FROM	LOAILOP LL JOIN LOP L ON L.MALOAI = LL.MALOAI
+				   JOIN DIEM D ON D.MALOP = L.MALOP
+				   JOIN HOCVIEN H ON H.MAHV = D.MAHV
+WHERE	H.TENHV LIKE 'Ð? Gia B?o' 
+	AND LL.TENLOAI LIKE 'Ti?ng Anh can b?n'
+	AND L.TENLOP LIKE 'L?p 1'
+	AND H.NGAYSINH LIKE '2001-12-02';
+
+--20. Tìm điểm lớn nhất ?
+SELECT MAX(DIEM) DIEMLONNHAT
+FROM DIEM;
