@@ -1,1 +1,17 @@
 *.exe
+*.obj
+*.out
+*.pdb
+*.ilk
+*.idb
+*.res
+*.pch
+*.pdb
+*.idb
+*.manifest
+*.iobj
+*.ipdb
+*.exp
+*.iobj
+*.ipdb
+*.iobj
