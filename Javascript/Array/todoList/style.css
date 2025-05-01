@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Jost", sans-serif;
+  background: #f0f2f5;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}
+
+.container {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  width: 500px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+#taskList {
+  max-height: 500px;
+  overflow-y: auto;
+  /* border: 1px solid #ccc; */
+  padding: 10px;
+}
+
+h2 {
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+}
+
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  outline: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 10px;
+}
+
+li {
+  background-color: #f9f9f9;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+li:hover {
+  background-color: #eee;
+}
+
+li.done span {
+  text-decoration: line-through;
+  color: #888;
+}
+
+li button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #e74c3c
+  cursor: pointer;
+}
+
+li:button:hover {
+  color: #c0392b;
+}
+
+li input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2);
+  cursor: pointer;
+}
